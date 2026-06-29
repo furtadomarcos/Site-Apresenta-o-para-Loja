@@ -55,8 +55,8 @@ recursos interativos para fidelização de clientes.
 ### Instalação
 
 ```bash
-git clone https://github.com/furtadomarcos/Site-de-apresenta-o-para-Loja.git
-cd Site-de-apresenta-o-para-Loja
+git clone https://github.com/furtadomarcos/Site-Apresenta-o-para-Loja.git
+cd Site-Apresenta-o-para-Loja
 npm install
 npm run dev
 ```
