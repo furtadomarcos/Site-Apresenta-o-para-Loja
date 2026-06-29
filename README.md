@@ -72,6 +72,19 @@ npm.cmd install
 npm.cmd run dev
 ```
 
+### Iniciador no Windows
+
+Para iniciar somente a API em uma maquina Windows, execute:
+
+```powershell
+.\INICIAR_PAGINA.bat
+```
+
+O arquivo instala as dependencias se necessario e inicia a API em
+`http://localhost:3333`. Para acessar de outro computador na mesma rede, use
+um dos enderecos IP mostrados na janela e libere a porta `3333` no firewall, se
+necessario.
+
 ## Variáveis de ambiente
 
 O frontend usa `http://localhost:3333` como endereço padrão da API. Para usar
