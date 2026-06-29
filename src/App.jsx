@@ -238,6 +238,50 @@ function App() {
 
   useEffect(() => {
     if (typeof window === "undefined") {
+      return undefined;
+    }
+
+    const revealElements = Array.from(
+      document.querySelectorAll("[data-scroll-reveal]"),
+    );
+
+    if (!revealElements.length) {
+      return undefined;
+    }
+
+    const revealElement = (element) => {
+      element.classList.add("is-visible");
+    };
+
+    if (!("IntersectionObserver" in window)) {
+      revealElements.forEach(revealElement);
+      return undefined;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) {
+            return;
+          }
+
+          revealElement(entry.target);
+          observer.unobserve(entry.target);
+        });
+      },
+      {
+        rootMargin: "0px 0px -12% 0px",
+        threshold: 0.18,
+      },
+    );
+
+    revealElements.forEach((element) => observer.observe(element));
+
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
       return;
     }
 
@@ -591,7 +635,7 @@ function App() {
       </header>
 
       <section className="daily-promo" id="promocoes">
-        <div className="daily-promo-copy">
+        <div className="daily-promo-copy" data-scroll-reveal="from-left">
           <span className="eyebrow">
             <Sparkles size={16} aria-hidden="true" />
             Promoções diárias
@@ -603,7 +647,7 @@ function App() {
           </p>
         </div>
 
-        <figure className="daily-promo-frame">
+        <figure className="daily-promo-frame" data-scroll-reveal="from-right">
           <img
             src="/promocao-diaria.jpg"
             alt="Promoções diárias do Supermercado Veiga"
@@ -813,7 +857,7 @@ function App() {
       </section>
 
       <section className="hero" id="inicio">
-        <div className="hero-content">
+        <div className="hero-content" data-scroll-reveal="from-left">
           <span className="eyebrow">
             <Sparkles size={16} aria-hidden="true" />
             Mais de 20 anos na região
@@ -855,7 +899,11 @@ function App() {
           </div>
         </div>
 
-        <aside className="hero-panel" aria-label="Resumo do Supermercado Veiga">
+        <aside
+          className="hero-panel"
+          data-scroll-reveal="from-right"
+          aria-label="Resumo do Supermercado Veiga"
+        >
           <div className="panel-top">
             <span className="status-dot" />
             <span>Tradição e confiança</span>
@@ -891,7 +939,7 @@ function App() {
       </section>
 
       <section className="section people-section" id="atendimento">
-        <div className="people-copy">
+        <div className="people-copy" data-scroll-reveal="from-left">
           <span className="eyebrow">
             <Store size={16} aria-hidden="true" />
             Atendimento no dia a dia
@@ -907,6 +955,14 @@ function App() {
           {peopleImages.map((image, index) => (
             <figure
               className={`people-image-card image-card-${index + 1}`}
+              data-scroll-reveal={
+                index === 0
+                  ? "from-left"
+                  : index === 1
+                    ? "from-top"
+                    : "from-right"
+              }
+              style={{ "--reveal-delay": `${index * 120}ms` }}
               key={image.id}
             >
               <img src={image.src} alt={image.alt} loading="lazy" />
@@ -968,7 +1024,7 @@ function App() {
         </div>
 
         <div className="delivery-layout">
-          <div className="delivery-card">
+          <div className="delivery-card" data-scroll-reveal="from-left">
             <Truck size={30} aria-hidden="true" />
             <div>
               <strong>Entrega residencial</strong>
@@ -980,7 +1036,7 @@ function App() {
             </a>
           </div>
 
-          <figure className="delivery-photo">
+          <figure className="delivery-photo" data-scroll-reveal="from-right">
             <img
               src="/atendimento-caixa-azul.png"
               alt="Atendimento no caixa do Supermercado Veiga com compra pronta."

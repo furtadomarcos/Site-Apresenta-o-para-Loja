@@ -1145,15 +1145,18 @@ h1 {
 }
 
 .image-card-1 {
+  --reveal-visible-transform: rotate(-1.2deg);
   grid-row: 1 / span 2;
   transform: rotate(-1.2deg);
 }
 
 .image-card-2 {
+  --reveal-visible-transform: translateY(-0.65rem) rotate(1deg);
   transform: translateY(-0.65rem) rotate(1deg);
 }
 
 .image-card-3 {
+  --reveal-visible-transform: translateY(0.55rem) rotate(-0.6deg);
   transform: translateY(0.55rem) rotate(-0.6deg);
 }
 
@@ -1507,6 +1510,52 @@ h1 {
   line-height: 1.7;
 }
 
+[data-scroll-reveal] {
+  --reveal-x: 0;
+  --reveal-y: 1.85rem;
+  --reveal-scale: 0.985;
+  opacity: 0;
+  filter: blur(14px);
+  clip-path: inset(0 0 12% 0 round 1.25rem);
+  transform: translate3d(var(--reveal-x), var(--reveal-y), 0)
+    scale(var(--reveal-scale));
+  transition:
+    opacity 700ms ease,
+    filter 720ms ease,
+    clip-path 820ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 860ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, filter, clip-path, transform;
+}
+
+[data-scroll-reveal="from-left"] {
+  --reveal-x: -2.35rem;
+  --reveal-y: 0;
+}
+
+[data-scroll-reveal="from-right"] {
+  --reveal-x: 2.35rem;
+  --reveal-y: 0;
+}
+
+[data-scroll-reveal="from-top"] {
+  --reveal-y: -1.65rem;
+}
+
+[data-scroll-reveal].is-visible {
+  opacity: 1;
+  filter: blur(0);
+  clip-path: inset(0 0 0 0 round 1.25rem);
+  transform: var(
+    --reveal-visible-transform,
+    translate3d(0, 0, 0) scale(1)
+  );
+}
+
+.people-image-card.is-visible:hover {
+  transform: translateY(-4px) rotate(0deg);
+}
+
 @media (max-width: 920px) {
   .site-header {
     flex-wrap: wrap;
@@ -1619,6 +1668,7 @@ h1 {
   .image-card-1,
   .image-card-2,
   .image-card-3 {
+    --reveal-visible-transform: translate3d(0, 0, 0) scale(1);
     grid-row: auto;
     transform: none;
   }
@@ -1691,25 +1741,39 @@ h1 {
   }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  [data-scroll-reveal] {
+    opacity: 1;
+    filter: none;
+    clip-path: none;
+    transform: var(
+      --reveal-visible-transform,
+      translate3d(0, 0, 0) scale(1)
+    );
+    transition: none;
+    will-change: auto;
+  }
+}
+
 @keyframes float-panel {
   0%,
   100% {
-    transform: translateY(0);
+    translate: 0 0;
   }
 
   50% {
-    transform: translateY(-0.55rem);
+    translate: 0 -0.55rem;
   }
 }
 
 @keyframes breathe-card {
   0%,
   100% {
-    transform: scale(1);
+    scale: 1;
   }
 
   50% {
-    transform: scale(1.025);
+    scale: 1.025;
   }
 }
 
