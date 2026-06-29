@@ -51,7 +51,17 @@ if not exist "node_modules" (
 
 if not defined PORT set "PORT=3333"
 
-echo API local:
+echo Preparando site para abrir no navegador...
+call npm.cmd run build
+if errorlevel 1 (
+  echo.
+  echo [ERRO] Falha ao preparar o site.
+  pause
+  exit /b 1
+)
+echo.
+
+echo Site e API local:
 echo   http://localhost:%PORT%
 echo.
 echo Possiveis enderecos para outra maquina na mesma rede:
@@ -60,13 +70,13 @@ for /f "tokens=2 delims=:" %%A in ('ipconfig ^| findstr /R /C:"IPv4"') do (
 )
 echo.
 echo Se outra maquina nao acessar, libere a porta %PORT% no firewall do Windows.
-echo Pressione Ctrl+C ou feche esta janela para parar a API.
+echo Pressione Ctrl+C ou feche esta janela para parar o site e a API.
 echo.
 
 call npm.cmd start
 
 set "EXIT_CODE=%ERRORLEVEL%"
 echo.
-echo API encerrada com codigo %EXIT_CODE%.
+echo Site e API encerrados com codigo %EXIT_CODE%.
 pause
 exit /b %EXIT_CODE%

@@ -74,21 +74,21 @@ npm.cmd run dev
 
 ### Iniciador no Windows
 
-Para iniciar somente a API em uma maquina Windows, execute:
+Para iniciar o site e a API em uma maquina Windows, execute:
 
 ```powershell
 .\INICIAR_PAGINA.bat
 ```
 
-O arquivo instala as dependencias se necessario e inicia a API em
+O arquivo instala as dependencias se necessario, prepara o site e inicia tudo em
 `http://localhost:3333`. Para acessar de outro computador na mesma rede, use
 um dos enderecos IP mostrados na janela e libere a porta `3333` no firewall, se
 necessario.
 
 ## Variáveis de ambiente
 
-O frontend usa `http://localhost:3333` como endereço padrão da API. Para usar
-outro endereço, crie um arquivo `.env`:
+O frontend usa o mesmo endereco do site como API por padrao. Para usar outro
+endereco, crie um arquivo `.env`:
 
 ```env
 VITE_API_URL=https://sua-api.exemplo.com

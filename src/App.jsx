@@ -24,7 +24,7 @@ import {
 } from "lucide-react";
 
 const whatsappNumber = "5500000000000";
-const apiBaseUrl = import.meta.env.VITE_API_URL || "http://localhost:3333";
+const apiBaseUrl = import.meta.env.VITE_API_URL || "";
 const promoShareGoal = 5;
 
 const sectors = [

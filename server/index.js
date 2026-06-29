@@ -1,10 +1,16 @@
 import cors from "cors";
 import express from "express";
 import { randomUUID } from "node:crypto";
+import { existsSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 
 const app = express();
 const port = process.env.PORT || 3333;
 const shareGoal = 5;
+const projectRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
+const distPath = join(projectRoot, "dist");
+const distIndexPath = join(distPath, "index.html");
 
 app.use(cors());
 app.use(express.json());
@@ -192,6 +198,20 @@ app.post("/api/whatsapp-leads", (request, response) => {
   });
 });
 
+if (existsSync(distIndexPath)) {
+  app.use(express.static(distPath));
+
+  app.get(/^(?!\/api).*/, (request, response) => {
+    response.sendFile(distIndexPath);
+  });
+} else {
+  app.get("/", (request, response) => {
+    response.status(503).send(
+      "Site ainda nao foi gerado. Execute npm run build antes de iniciar a API.",
+    );
+  });
+}
+
 app.listen(port, () => {
-  console.log(`API Mercado Veiga running on http://localhost:${port}`);
+  console.log(`Mercado Veiga running on http://localhost:${port}`);
 });
