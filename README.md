@@ -49,8 +49,12 @@ recursos interativos para fidelização de clientes.
 
 ### Requisitos
 
-- Node.js 20 ou superior
+- Node.js 20.19+ ou 22.12+
 - npm
+
+Se for iniciar pelo Windows usando `INICIAR_PAGINA.bat`, o Node.js e o npm podem
+ser preparados automaticamente em modo portatil quando nao estiverem instalados
+no computador.
 
 ### Instalação
 
@@ -84,6 +88,11 @@ O arquivo instala as dependencias se necessario, prepara o site e inicia tudo em
 `http://localhost:3333`. Para acessar de outro computador na mesma rede, use
 um dos enderecos IP mostrados na janela e libere a porta `3333` no firewall, se
 necessario.
+
+Se o computador nao tiver uma versao compativel do Node.js, o iniciador baixa o
+Node.js 22.12.0 para a pasta `.tools/` e usa essa copia local. Essa pasta nao
+entra no Git; apenas o script que prepara o Node.js fica versionado. Na primeira
+execucao e necessario ter internet.
 
 ## Variáveis de ambiente
 

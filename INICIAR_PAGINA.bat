@@ -4,20 +4,46 @@ setlocal EnableExtensions
 title INICIAR_PAGINA - Mercado Veiga API
 cd /d "%~dp0"
 
+set "NODE_VERSION=22.12.0"
+set "NODE_ARCH=x64"
+if /I "%PROCESSOR_ARCHITECTURE%"=="ARM64" set "NODE_ARCH=arm64"
+if /I "%PROCESSOR_ARCHITEW6432%"=="ARM64" set "NODE_ARCH=arm64"
+set "LOCAL_NODE_DIR=%~dp0.tools\node-v%NODE_VERSION%-win-%NODE_ARCH%"
+
 echo.
 echo ==========================================
 echo   INICIAR_PAGINA - Mercado Veiga API
 echo ==========================================
 echo.
 
+set "NEED_LOCAL_NODE="
 where node >nul 2>nul
 if errorlevel 1 (
-  echo [ERRO] Node.js nao encontrado.
-  echo Instale o Node.js 20 ou superior e execute novamente.
-  echo https://nodejs.org/
-  echo.
-  pause
-  exit /b 1
+  set "NEED_LOCAL_NODE=1"
+)
+
+if not defined NEED_LOCAL_NODE (
+  node -e "const [major, minor] = process.versions.node.split('.').map(Number); const ok = (major === 20 && minor >= 19) || (major === 22 && minor >= 12) || major > 22; process.exit(ok ? 0 : 1)" >nul 2>nul
+  if errorlevel 1 set "NEED_LOCAL_NODE=1"
+)
+
+if defined NEED_LOCAL_NODE (
+  echo Node.js 20.19+ nao encontrado. Preparando Node.js portatil %NODE_VERSION%...
+  powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0scripts\ensure-node.ps1" -Version "%NODE_VERSION%"
+  if errorlevel 1 (
+    echo.
+    echo [ERRO] Falha ao preparar o Node.js portatil.
+    echo Verifique sua conexao com a internet e execute novamente.
+    echo.
+    pause
+    exit /b 1
+  )
+  set "PATH=%LOCAL_NODE_DIR%;%PATH%"
+)
+
+where npm.cmd >nul 2>nul
+if errorlevel 1 (
+  if exist "%LOCAL_NODE_DIR%\npm.cmd" set "PATH=%LOCAL_NODE_DIR%;%PATH%"
 )
 
 where npm.cmd >nul 2>nul
